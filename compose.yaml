@@ -6,10 +6,15 @@ services:
     working_dir: "/"
     ports:
       - 9081:8081
+    environment:
+      - postgres.service.url=http://postgres-ms:8082/postgresInventory
+      - mongo.service.url=http://mongo-ms:8083/mongoInventory
+      - redis.service.url=http://redis-ms:8084/redisInventory
     entrypoint:
       - "java"
       - "-jar"
       - "/usr/src/myapp/app.jar"
+
 
   postgres-db:
     image: postgres

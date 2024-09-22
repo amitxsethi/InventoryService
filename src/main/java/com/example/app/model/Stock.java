@@ -1,4 +1,4 @@
-package com.example.inventoryService.model;
+package com.example.app.model;
 
 public record Stock(Item item, Long quantity) {
 }
