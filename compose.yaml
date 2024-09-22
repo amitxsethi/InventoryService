@@ -1,0 +1,84 @@
+name: "Inventory Application"
+services:
+  inventory-service:
+    image: inventory-service
+    container_name: "inventory-service-container"
+    working_dir: "/"
+    ports:
+      - 9081:8081
+    entrypoint:
+      - "java"
+      - "-jar"
+      - "/usr/src/myapp/app.jar"
+
+  postgres-db:
+    image: postgres
+    container_name: "postgres-db"
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+
+  mongo-db:
+    image: mongo
+    container_name: "mongo-db"
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: test-db
+
+  redis-db:
+    image: redis
+    container_name: "redis-db"
+    ports:
+      - 6379:6379
+
+  postgres-ms:
+    image: postgres-ms
+    container_name: "postgres-ms"
+    working_dir: "/"
+    ports:
+      - 9082:8082
+    depends_on:
+      - postgres-db
+    environment:
+      - spring.datasource.url=jdbc:postgresql://postgres-db:5432/postgres
+    entrypoint:
+      - "java"
+      - "-jar"
+      - "/usr/src/myapp/app.jar"
+
+  mongo-ms:
+    image: mongo-ms
+    container_name: "mongo-ms"
+    working_dir: "/"
+    ports:
+      - 9083:8083
+    depends_on:
+      - mongo-db
+    environment:
+      - spring.data.mongodb.host=mongo-db
+    entrypoint:
+      - "java"
+      - "-jar"
+      - "/usr/src/myapp/app.jar"
+
+
+  redis-ms:
+    image: redis-ms
+    container_name: "redis-ms"
+    working_dir: "/"
+    ports:
+      - 9084:8084
+    depends_on:
+      - redis-db
+    environment:
+      - spring.redis.cluster.nodes=redis-db:6379
+    entrypoint:
+      - "java"
+      - "-jar"
+      - "/usr/src/myapp/app.jar"
