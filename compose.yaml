@@ -69,8 +69,8 @@ services:
 
 
   redis-ms:
-    image: redis-ms
-    container_name: "redis-ms"
+    container_name: redis-ms
+    image: "redis-ms"
     working_dir: "/"
     ports:
       - 9084:8084
