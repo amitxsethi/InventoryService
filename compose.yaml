@@ -1,8 +1,7 @@
-name: "Inventory Application"
 services:
   inventory-service:
     image: inventory-service
-    container_name: "inventory-service-container"
+    container_name: "inventory-service"
     working_dir: "/"
     ports:
       - 9081:8081
@@ -10,11 +9,12 @@ services:
       - postgres.service.url=http://postgres-ms:8082/postgresInventory
       - mongo.service.url=http://mongo-ms:8083/mongoInventory
       - redis.service.url=http://redis-ms:8084/redisInventory
+      - management.endpoints.web.exposure.include=*
+      - management.endpoint.health.enabled=true
     entrypoint:
       - "java"
       - "-jar"
       - "/usr/src/myapp/app.jar"
-
 
   postgres-db:
     image: postgres
